@@ -76,6 +76,9 @@
   },
   "dependencies": {
     "animejs": "^2.2.0",
-    "lodash.isequal": "^4.5.0"
+    "lodash.functions": "^4.3.0",
+    "lodash.isequal": "^4.5.0",
+    "lodash.omit": "^4.5.0",
+    "react-transition-group": "^2.2.1"
   }
 }

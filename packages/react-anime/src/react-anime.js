@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import { Transition, TransitionGroup } from 'react-transition-group';
 import isEqual from 'lodash.isequal';
+import omit from 'lodash.omit';
+import functions from 'lodash.functions';
 const anime = typeof window !== 'undefined' ? require('animejs') : _ => _;
+
 
 export class Anime extends Component {
   props: AnimeProps;
@@ -19,7 +23,12 @@ export class Anime extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.createAnime(nextProps);
+    if(!isEqual(
+      omit(this.props, functions(this.props), 'children'),
+      omit(nextProps, functions(nextProps), 'children')
+    )) {
+      this.createAnime(nextProps);      
+    }
   }
 
   createAnime = (props = this.props) => {
@@ -40,7 +49,7 @@ export class Anime extends Component {
   };
 
   /**
-   * Render children, and their diffs until promise of anime finishes.
+   * Render children
    */
   render() {
     let { style, children } = this.props;
@@ -53,6 +62,48 @@ export class Anime extends Component {
       </g>
     );
   }
+}
+
+class TransitionWrapper extends Component {
+  /**
+   * Manually notify the transition of completion
+   */
+  animComplete = () => {
+    if(this.transitionDone != undefined) {
+      this.transitionDone();
+    }
+  }
+  render() {
+    return (
+      <Transition {...this.props} addEndListener={(node, done) => this.transitionDone = done}>
+        {(status) => (
+          <Anime 
+            {...(this.props.in ? this.props.enterAnim : this.props.exitAnim)}
+            complete={this.animComplete}
+          >
+            {this.props.children}
+          </Anime>
+        )}
+      </Transition>
+    );
+  }
+}
+
+export class AnimeTransition extends Component {    
+    render() {
+      let { enterAnim, exitAnim, children, ...otherProps } = this.props;
+      if (!Array.isArray(children)) children = [children];
+  
+      return (
+        <TransitionGroup {...otherProps}>     
+          {children.map((child, i) => (
+            <TransitionWrapper key={child.key} enterAnim={enterAnim} exitAnim={exitAnim}>
+              {child}
+            </TransitionWrapper>
+          ))}
+        </TransitionGroup>
+      );
+    }
 }
 
 export default Anime;
