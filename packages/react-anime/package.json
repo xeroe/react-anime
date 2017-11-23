@@ -2,14 +2,15 @@
   "name": "react-anime",
   "version": "2.0.2",
   "description": "(ﾉ´ヮ´)ﾉ*:･ﾟ✧ A super easy animation library for React.",
-  "main": "dist/react-anime.js",
-  "typings": "dist/react-anime.d.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "webpack src/react-anime.js dist/react-anime.js && cp src/react-anime.d.ts dist/react-anime.d.ts && cp src/react-anime.js.flow dist/react-anime.js.flow",
-    "watch": "webpack -w src/react-anime.js dist/react-anime.js",
+    "build": "webpack src/index.js dist/index.js && cp src/index.d.ts dist/index.d.ts && cp src/index.js.flow dist/index.js.flow",
+    "watch": "webpack -w src/index.js dist/index.js",
     "pretest": "jest -u",
     "test": "jest --coverage",
-    "coverage": "nyc npm test && nyc report --reporter=lcov && codecov"
+    "coverage": "nyc npm test && nyc report --reporter=lcov && codecov",
+    "lint": "eslint --ext js --ext jsx src || exit 0"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
@@ -50,6 +51,7 @@
   "homepage": "https://hyperfuse.github.io/react-anime",
   "devDependencies": {
     "babel-core": "^6.26.x",
+    "babel-eslint": "^8.0.2",
     "babel-jest": "^21.2.x",
     "babel-loader": "^7.1.x",
     "babel-plugin-syntax-jsx": "^6.18.x",
@@ -61,14 +63,21 @@
     "babel-preset-stage-2": "^6.24.x",
     "codecov": "^3.0.x",
     "coveralls": "^3.0.x",
+    "eslint": "^4.11.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.5.1",
     "flow-bin": "^0.58.x",
     "flow-typed": "^2.2.x",
     "jest": "^21.2.x",
     "nyc": "^11.2.x",
-    "react-test-renderer": "^16.0.x",
-    "webpack": "^3.8.x",
     "react": "^16.x",
-    "react-dom": "^16.x"
+    "react-dom": "^16.x",
+    "react-test-renderer": "^16.0.x",
+    "webpack": "^3.8.x"
   },
   "peerDependencies": {
     "react": "^16.x",
@@ -79,6 +88,7 @@
     "lodash.functions": "^4.3.0",
     "lodash.isequal": "^4.5.0",
     "lodash.omit": "^4.5.0",
+    "prop-types": "^15.6.0",
     "react-transition-group": "^2.2.1"
   }
 }
