@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react';
 import isEqual from 'lodash.isequal';
 import omit from 'lodash.omit';

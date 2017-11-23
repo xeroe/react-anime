@@ -1,11 +1,23 @@
 {
-    "extends": "airbnb",
+    "extends": [
+      "airbnb",
+      "plugin:flowtype/recommended"
+    ],
     "parser": "babel-eslint",
+    "plugins": [
+      "flowtype"
+    ],
     "rules": {
       "react/prefer-stateless-function": 0,
       "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
       "react/forbid-prop-types": 0,
-      "object-curly-newline": [1, {"multiline": true}]
+      "object-curly-newline": [1, {"multiline": true}],
+      "react/sort-comp": [1, {
+        "order": [
+          "props",
+          "everything-else"
+        ]
+      }]
     },
     "env": {
       "browser": true
