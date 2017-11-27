@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Transition } from 'react-transition-group';
 import Anime from './Anime';
+import { childrenId } from '../utils/PropTypes';
 
 class TransitionWrapper extends Component {
   /**
@@ -36,13 +37,14 @@ TransitionWrapper.propTypes = {
   in: PropTypes.bool,
   enterAnim: PropTypes.object,
   exitAnim: PropTypes.object,
-  children: PropTypes.node.isRequired,
+  children: childrenId,
 };
 
 TransitionWrapper.defaultProps = {
   in: true,
   enterAnim: {},
   exitAnim: {},
+  children: [],
 };
 
 export default TransitionWrapper;

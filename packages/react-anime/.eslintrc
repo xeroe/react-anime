@@ -17,7 +17,8 @@
           "props",
           "everything-else"
         ]
-      }]
+      }],
+      "import/prefer-default-export": 0
     },
     "env": {
       "browser": true

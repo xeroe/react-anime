@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import isEqual from 'lodash.isequal';
 import omit from 'lodash.omit';
 import functions from 'lodash.functions';
+import { childrenId } from '../utils/PropTypes';
+import isValidChild from '../utils/IsValidChild';
 
 const anime = typeof window !== 'undefined' ? require('animejs') : _ => _;
 
@@ -15,7 +17,7 @@ class Anime extends Component {
     super(props);
 
     // Current Anime DOM Targets
-    this.targets = [];
+    this.targetsMap = {};
   }
 
   componentDidMount() {
@@ -32,9 +34,10 @@ class Anime extends Component {
   }
 
   createAnime = (props = this.props) => {
-    const animeProps = { targets: this.targets, ...props };
+    const targets = Object.values(this.targetsMap);
+    const animeProps = { targets, ...props };
 
-    anime.remove(this.targets);
+    anime.remove(targets);
     delete animeProps.children;
 
     if (typeof this.anime === 'undefined') {
@@ -44,8 +47,13 @@ class Anime extends Component {
     }
   };
 
-  addTarget = (newTarget) => {
-    this.targets = [...this.targets, newTarget];
+  addTarget = (node, element) => {
+    const { id } = element.props;
+    if (node !== null) {
+      this.targetsMap[id] = node;
+    } else {
+      delete this.targetsMap[id];
+    }
   };
 
   /**
@@ -54,12 +62,22 @@ class Anime extends Component {
   render() {
     let { children } = this.props;
     if (!Array.isArray(children)) children = [children];
-
     return (
-      children.map(child =>
-        React.cloneElement(child, { ref: this.addTarget }))
+      children.map((child) => {
+        if (isValidChild(child)) {
+          return React.cloneElement(
+            child,
+            { ref: ref => this.addTarget(ref, child), key: child.props.id },
+          );
+        }
+        return null;
+      })
     );
   }
 }
+
+Anime.propTypes = { children: childrenId };
+
+Anime.defaultProps = { children: [] };
 
 export default Anime;

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup } from 'react-transition-group';
 import TransitionWrapper from './TransitionWrapper';
+import { childrenId } from '../utils/PropTypes';
+import isValidChild from '../utils/IsValidChild';
 
 class AnimeTransition extends Component {
   render() {
@@ -9,13 +11,20 @@ class AnimeTransition extends Component {
     const { enterAnim, exitAnim, ...props } = this.props;
     if (!Array.isArray(children)) children = [children];
 
-    return (
-      <TransitionGroup {...props}>
-        {children.map(child => (
-          <TransitionWrapper key={child.key} enterAnim={enterAnim} exitAnim={exitAnim}>
+    const transitions = children.map((child) => {
+      if (isValidChild(child)) {
+        return (
+          <TransitionWrapper key={child.props.id} enterAnim={enterAnim} exitAnim={exitAnim}>
             {child}
           </TransitionWrapper>
-        ))}
+        );
+      }
+      return null;
+    });
+
+    return (
+      <TransitionGroup {...props}>
+        {transitions}
       </TransitionGroup>
     );
   }
@@ -24,12 +33,13 @@ class AnimeTransition extends Component {
 AnimeTransition.propTypes = {
   enterAnim: PropTypes.object,
   exitAnim: PropTypes.object,
-  children: PropTypes.node.isRequired,
+  children: childrenId,
 };
 
 AnimeTransition.defaultProps = {
   enterAnim: {},
   exitAnim: {},
+  children: [],
 };
 
 export default AnimeTransition;
